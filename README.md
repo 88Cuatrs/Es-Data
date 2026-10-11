@@ -6,9 +6,13 @@ Este repositorio reúne el desarrollo de un lenguaje de análisis de datos cuya 
 
 La meta es que un análisis pueda describir con claridad qué datos se cargan, qué transformaciones se aplican, qué cálculos se realizan y cómo se obtiene un resultado reproducible. El proyecto combina una sintaxis española con una implementación de runtime nativo y herramientas para trabajar con arreglos, tablas y estadísticas.
 
+## Implementación y rendimiento
+
+El núcleo está implementado principalmente en C17. La eficiencia de ejecución es uno de los objetivos de diseño, con la aspiración de ofrecer una alternativa rápida para tareas de análisis de datos frente a soluciones dinámicas como Python. Esa ventaja no se presenta como un resultado universal ya demostrado: depende de la carga, el entorno y las mediciones comparables. El repositorio incluye benchmarks y pruebas, pero toda afirmación de superioridad requiere publicar y reproducir comparaciones equivalentes.
+
 ## Desarrollo actual
 
-La implementación está escrita principalmente en C17 y contiene componentes de análisis léxico, parser, árbol sintáctico, validación semántica y runtime. El flujo canónico está integrado para varias rutas de ejecución, aunque la consolidación de todas las capacidades continúa en curso y todavía coexisten componentes de compatibilidad y módulos experimentales.
+El código contiene componentes de análisis léxico, parser, árbol sintáctico, validación semántica y runtime. El flujo canónico está integrado para varias rutas de ejecución, aunque la consolidación de todas las capacidades continúa en curso y todavía coexisten componentes de compatibilidad y módulos experimentales.
 
 Entre las capacidades ya implementadas y probadas se encuentran:
 
