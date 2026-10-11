@@ -1,339 +1,42 @@
-<p align="center">
-  <img src="assets/milena-logo-horizontal.jpg" alt="Milena — Lenguaje para análisis de datos" width="900">
-</p>
+# Es-Data
 
-<p align="center">
-  <strong>Lenguaje de programación en español para convertir datos en análisis reproducibles.</strong>
-</p>
+Este repositorio reúne el desarrollo de un lenguaje de análisis de datos cuya sintaxis está expresada de forma nativa en español. La propuesta busca reducir la barrera que puede producir una sintaxis basada en palabras clave en inglés y hacer más comprensibles los pasos habituales de preparación, transformación y análisis de información. No pretende eliminar la necesidad de aprender lógica o conceptos de programación: busca que la sintaxis sea más cercana para quienes piensan y trabajan en español.
 
-<p align="center">
-  <kbd>C17</kbd>
-  <kbd>cross-platform</kbd>
-  <kbd>data-analysis</kbd>
-  <kbd>data-science</kbd>
-  <kbd>milena</kbd>
-  <kbd>programming-language</kbd>
-  <kbd>scientific-computing</kbd>
-  <kbd>statistics</kbd>
-  <kbd>windows</kbd>
-  <kbd>winget</kbd>
-</p>
+## Enfoque
 
-# Milena
+La meta es que un análisis pueda describir con claridad qué datos se cargan, qué transformaciones se aplican, qué cálculos se realizan y cómo se obtiene un resultado reproducible. El proyecto combina una sintaxis española con una implementación de runtime nativo y herramientas para trabajar con arreglos, tablas y estadísticas.
 
-## Una nueva experiencia de programar datos
+## Desarrollo actual
 
-Milena es un lenguaje de programación orientado al análisis de datos, la estadística y la computación científica, con una sintaxis española cada vez más humana.
+La implementación está escrita principalmente en C17 y contiene componentes de análisis léxico, parser, árbol sintáctico, validación semántica y runtime. El flujo canónico está integrado para varias rutas de ejecución, aunque la consolidación de todas las capacidades continúa en curso y todavía coexisten componentes de compatibilidad y módulos experimentales.
 
-Su propuesta no consiste solamente en traducir palabras clave del inglés. Milena busca cambiar la relación entre la persona y el análisis: que trabajar con datos se acerque a expresar una idea, no a descifrar una sucesión de comandos técnicos.
+Entre las capacidades ya implementadas y probadas se encuentran:
 
-La dirección del proyecto es construir un lenguaje donde una persona pueda describir qué datos tiene, qué quiere limpiar, qué transformación necesita, cómo desea agruparlos, qué medida quiere calcular y qué resultado desea obtener, mediante una arquitectura de lenguaje real:
+- Creación y operaciones sobre arreglos numéricos, incluidas reducciones y estadísticas descriptivas.
+- Carga de datos tabulares desde CSV, declaración de tipos de columna, limpieza de valores nulos y duplicados, filtros, columnas calculadas, agrupaciones, resúmenes y combinaciones de datos.
+- Exportación de resultados y reportes en JSON.
+- Perfiles estadísticos, histogramas y análisis como normalidad, correlación, Poisson, Wilcoxon, chi-cuadrado, riesgo relativo y odds ratio.
+- Funciones iniciales para algunos análisis actuariales y cálculos financieros sencillos.
+- Lectura secuencial de CSV para ciertos resúmenes con presupuestos explícitos de filas, memoria temporal y recursos. Algunas rutas admiten agrupación acotada y uso de almacenamiento temporal; no todas las operaciones tabulares funcionan en modo flujo.
+- Una suite amplia de pruebas de componentes, validación del parser y ejecución de programas de ejemplo.
 
-```text
-script .milena
-      ↓
-lexer → parser → AST → semántica → runtime canónico
-      ↓
-arreglos, datasets, tablas, estadística y reportes
-```
+## Etapas experimentales y límites
 
-La sintaxis actual todavía utiliza paréntesis, llaves y símbolos porque permiten interpretar los programas con precisión. La evolución futura busca reducir progresivamente las concatenaciones y expresiones técnicas innecesarias, acercando el lenguaje a una forma más natural de describir análisis.
+Hay prototipos de bytecode, máquina virtual y compilación nativa para subconjuntos escalares acotados. No representan soporte completo del lenguaje ni permiten compilar cualquier programa. Las construcciones no cubiertas deben rechazarse explícitamente; no se presentan como capacidades terminadas.
 
-## La máquina del Excel, convertida en lenguaje
+El proyecto todavía no ofrece procesamiento distribuido, ejecución en clúster, garantías de latencia fija ni una ruta de streaming para todas las operaciones. Las funciones de alto nivel, la unificación completa del pipeline y la distribución de paquetes continúan evolucionando. Los paquetes y manifiestos de distintas plataformas requieren gates adicionales de publicación e instalación limpia; la existencia de scripts de empaquetado no significa que la instalación pública esté disponible.
 
-Excel demostró que una persona puede observar datos, transformarlos y obtener respuestas sin construir desde cero un sistema completo. Milena toma esa idea y la lleva hacia un lenguaje de programación.
+## Compilación y pruebas
 
-Milena puede entenderse como una **máquina programable de análisis de datos**:
+El repositorio incluye un sistema de construcción con Make. En un entorno compatible con C17, las comprobaciones generales se pueden ejecutar con:
 
-- las tablas representan la información;
-- las transformaciones representan el razonamiento;
-- las operaciones estadísticas representan las preguntas;
-- el script representa el procedimiento completo;
-- el reporte representa el resultado reproducible.
-
-A diferencia de un flujo manual de celdas y clics, un programa Milena conserva qué archivo se utilizó, qué limpieza se aplicó, qué fórmulas se ejecutaron, cómo se agruparon los registros y qué reporte se generó.
-
-La visión es combinar la accesibilidad conceptual de una hoja de cálculo con la reproducibilidad, automatización y control de un lenguaje de programación.
-
-## Primer programa
-
-```milena
-.analisis resumen {
-    arreglo valores = [1, 2, 3, 4];
-
-    suma(valores);
-    media(valores);
-    mediana(valores);
-    percentil(valores, 90);
-}
-```
-
-Guárdalo como `estadistica.milena` y ejecútalo con:
-
-```bash
-./milena run estadistica.milena
-```
-
-## Capacidades actuales
-
-Milena cuenta con una ruta canónica para:
-
-- crear arreglos numéricos y arreglos de ceros;
-- calcular suma, media, mínimo, máximo, varianza, desviación estándar, mediana y percentiles;
-- ejecutar reducciones por eje y conservar dimensiones;
-- cargar datasets CSV y declarar columnas numéricas, textuales, categóricas, binarias y de fecha;
-- eliminar valores nulos y duplicados;
-- crear columnas calculadas y extraer períodos desde fechas;
-- filtrar, agrupar, resumir y unir datasets;
-- seleccionar columnas y exportar reportes JSON;
-- generar perfiles estadísticos e histogramas;
-- ejecutar normalidad, tasas, Poisson, correlación, Wilcoxon y chi cuadrado;
-- calcular riesgo relativo y odds ratio;
-- generar modelos SST;
-- ejecutar interés simple desde el lenguaje;
-- procesar resúmenes numéricos CSV en modo flujo, sin materializar todas las filas;
-- medir filas procesadas, filas válidas, errores y tiempo de la ejecución en flujo.
-
-## Análisis de datasets
-
-```milena
-.analisis ventas {
-    dataset cargar datos("datos/ventas.csv")
-
-    variable precio numerica
-    variable cantidad numerica
-    variable fecha texto
-
-    .limpiar dataset {
-        #nulos("eliminar")
-        #duplicados("eliminar")
-    }
-
-    .transformar dataset {
-        #total("precio * cantidad")
-        #periodo("mes de fecha")
-    }
-
-    .agrupar dataset {
-        #por("periodo")
-        #suma("total")
-        #media("total")
-        #conteo("total")
-    }
-
-    .exportar {
-        ("reporte-ventas.json")
-    }
-}
-```
-
-Ejecútalo con:
-
-```bash
-./milena run ventas.milena
-```
-
-### Modo flujo para grandes CSV
-
-Para resúmenes numéricos que no necesitan conservar toda la tabla, Milena ofrece
-una ruta de memoria acotada:
-
-```milena
-.analisis ventas_masivas {
-    datos desde "datos/ventas_masivas.csv"
-        procesar por lotes de 4096 filas
-        con registros de hasta 8 MiB
-
-    resumir {
-        suma de "importe";
-        media de "importe";
-        contar de "importe";
-        varianza de "importe";
-    }
-
-    guardar resultado en "reporte_flujo.json"
-}
-```
-
-El flujo lee el archivo secuencialmente, usa acumuladores de una pasada y no
-crea un `Dataset` o `MilenaTable` con todas las filas. `con registros de hasta
-8 MiB` es opcional y el runtime impone un tope duro de 64 MiB por registro.
-El reporte expone límites, pico de búfer, filas y tiempo observado. El tiempo
-real depende del tamaño del archivo y del almacenamiento: no es una garantía
-de latencia fija.
-
-La ruta admite `suma`, `media`, `minimo`, `maximo`, `conteo`, `varianza` y
-`desviacion_estandar`, sin agrupaciones ilimitadas, joins, medianas, percentiles,
-spill a disco ni procesamiento distribuido. La sintaxis legacy de PR24 sigue
-siendo compatible. Consulta [la documentación del modo flujo](docs/STREAMING_EXECUTION.md).
-
-## Instalación y uso
-
-### Linux
-
-Instala las herramientas de compilación:
-
-```bash
-sudo apt update
-sudo apt install -y git build-essential
-```
-
-Descarga, construye y prueba Milena:
-
-```bash
-git clone https://github.com/46Neon/Milena.git
-cd Milena
-./build.sh
-```
-
-Uso directo:
-
-```bash
-./milena run examples/estadistica.milena
-./milena vm programa_escalar.milena
-./milena build programa_escalar.milena -o programa
-./programa
-./milena inspect datos.csv
-./milena analizar datos.csv reporte.json
-./milena perfil datos.csv perfil.json
-```
-
-`run` conserva la ruta existente del intérprete. `vm` compila a MLBC v1.2 desde la HIR escalar tipada canónica, verifica el bytecode y ejecuta esa entrada en la VM; muestra el resultado numérico en hexadecimal. `build <archivo.milena> -o <programa>` usa los mismos bytes verificados y emite un ejecutable nativo autónomo (no requiere después el fuente `.milena`) únicamente en Linux x86-64. En Windows, Termux/Android y otros destinos, `build` informa explícitamente que AOT no está soportado; la VM portable sigue disponible.
-
-Estos dos comandos nuevos son una ruta experimental explícita, no compatibilidad completa con el lenguaje. El subconjunto exacto es una función `principal` sin parámetros, ayudantes escalares numéricos no recursivos, variables numéricas/booleanas locales, asignación, aritmética numérica, comparaciones admitidas, llamadas resueltas y control `si`/`sino` con condición booleana; todas las rutas deben retornar un número. Globales, HIR de datos/tablas, parámetros de `principal`, recursión y demás construcciones no representadas se rechazan sin redirigir al intérprete. Para esas fuentes, usa la ruta normal `run` cuando la gramática existente lo admita. Los detalles, compatibilidad v1.0/v1.1 y límites pendientes están en [BYTECODE v1](docs/BYTECODE_V1.md). La integración CLI no completa la fase 2 ni la fase 3 completa del plan.
-
-También existe un constructor local de paquete Debian:
-
-```bash
-./packaging/debian/build-local-deb.sh
-```
-
-Este comando crea un paquete local para pruebas; no significa todavía que Milena esté publicada en un repositorio APT.
-
-### Windows
-
-Instala Git y LLVM/Clang:
-
-```powershell
-winget install LLVM.LLVM
-```
-
-Construye el ejecutable portable:
-
-```powershell
-git clone https://github.com/46Neon/Milena.git
-cd Milena
-.\packaging\windows\build.ps1
-```
-
-El ejecutable se genera en:
-
-```text
-dist\windows\milena.exe
-```
-
-Ejecuta un ejemplo:
-
-```powershell
-.\dist\windows\milena.exe run .\examples\estadistica.milena
-```
-
-En Windows también está disponible el modo experimental `vm` para el subconjunto
-escalar documentado; `build` falla explícitamente porque el backend nativo está
-limitado a Linux x86-64.
-
-### Termux
-
-Instala Git, Clang y Make:
-
-```bash
-pkg update
-pkg install -y git clang make
-```
-
-Descarga y compila:
-
-```bash
-git clone https://github.com/46Neon/Milena.git
-cd Milena
+```sh
 make
-```
-
-Ejecuta las pruebas y un ejemplo:
-
-```bash
 make test
-./milena run examples/estadistica.milena
 ```
 
-Termux utiliza las mismas fuentes C17 y el mismo pipeline canónico. La validación automatizada principal se ejecuta actualmente en Linux y Windows; cualquier diferencia específica de Android o Termux debe reportarse con el dispositivo, la versión de Termux y el commit utilizado.
-
-## Instalación y empaquetado por plataformas
-
-Los comandos objetivo, la arquitectura de cada artefacto, su disponibilidad y los requisitos pendientes se mantienen en la [matriz de instalación](docs/INSTALLATION_MATRIX.md). No se deben presentar como instalables desde un equipo limpio hasta que cada paquete esté indexado en una fuente consultable y haya pasado una prueba real de instalación.
-
-| Plataforma | Comando objetivo | Estado |
-|---|---|---|
-| Windows x64 | `winget install --id 46Neon.Milena --exact` | Manifiestos adjuntos a una Release; publicación/indexación WinGet y prueba limpia pendientes. |
-| Debian/Ubuntu Linux amd64 | `sudo apt install milena` | `.deb` local/de Release; repositorio APT Linux firmado y registrado pendiente. |
-| Android/Termux AArch64 | `pkg install milena` | Receta candidata; aceptación/publicación y prueba en Android/Bionic pendientes. |
-
-Los paquetes Linux y Termux son diferentes aunque ambos usen formato `.deb`: Linux usa su ABI y rutas `/usr`; Termux usa Bionic y `$PREFIX`. El workflow `.github/workflows/publish-apt.yml` corresponde al repositorio Termux/AArch64, no al canal APT de Debian/Ubuntu. Consulta la matriz para los gates y límites exactos por canal.
-
-## Estado del proyecto
-
-Milena ya es un runtime funcional y verificable, no solamente una idea conceptual ni una colección de ejemplos aislados. Cuenta con un pipeline lexer → parser → AST → semántica → runtime, ejecución de arreglos, datasets y tablas, análisis estadístico, operaciones SST, integración financiera inicial, reportes reproducibles y validación automatizada en Linux y Windows.
-
-El proyecto se encuentra en una etapa de **consolidación avanzada del núcleo del lenguaje**. La arquitectura principal está implementada y validada, mientras que la sintaxis, las APIs y los módulos de alto nivel continúan evolucionando.
-
-## Volumen de datos y alcance industrial
-
-Milena trabaja principalmente con datasets y tablas cargados en memoria para transformaciones, joins y análisis completos. Además, PR24 incorpora una ruta de flujo para resúmenes numéricos CSV: esa ruta procesa el archivo secuencialmente y mantiene memoria acotada, sin materializar todas las filas.
-
-El modo flujo no convierte automáticamente cualquier operación en streaming. Todavía no ofrece procesamiento distribuido, clústeres, joins externos ni garantías de latencia fija para volúmenes masivos. Leer todas las filas tiene un coste proporcional al archivo; los milisegundos se miden como observabilidad, no como una promesa universal.
-
-Para convertirse en una plataforma preparada para grandes soluciones tecnológicas del mercado deberá ampliar el streaming a agrupaciones y joins externos, incorporar más formatos, medir benchmarks de alto volumen, mejorar la planificación, mantener políticas de memoria, añadir observabilidad y completar el empaquetado oficial.
-
-La descripción más honesta es:
-
-> Milena es un proyecto de ingeniería de lenguaje con un núcleo funcional avanzado, orientado a convertirse en una plataforma científica y de análisis de datos de alcance industrial.
-
-No es solamente un ejercicio educativo, pero tampoco se presenta todavía como una plataforma industrial masiva ya consolidada. Es una base tecnológica real, verificable y en evolución hacia ese objetivo.
-
-## Compilación nativa AOT (subconjunto de fase 1)
-
-En hosts POSIX con un compilador C17 disponible, `milena build programa.milena -o programa` genera un ejecutable nativo a partir de la IR tipada canónica verificada. No ejecuta ni empaqueta bytecode. El alcance está limitado a funciones escalares `F64`, comparaciones booleanas, CFG y llamadas internas verificadas; las operaciones no representadas se rechazan. Windows conserva el comando, pero el backend AOT no está habilitado allí. Consulta [el contrato y el subconjunto exacto de AOT](docs/NATIVE_AOT.md).
-
-## Contribuir
-
-Puedes contribuir mediante:
-
-- ejemplos `.milena`;
-- pruebas de integración;
-- documentación;
-- reportes de errores;
-- mejoras del lexer, parser, AST y semántica;
-- optimización del runtime;
-- nuevos análisis estadísticos;
-- mejoras de portabilidad;
-- herramientas de empaquetado;
-- propuestas para hacer la sintaxis más humana.
-
-Al reportar un problema, incluye:
-
-- sistema operativo;
-- versión del compilador;
-- comando utilizado;
-- script mínimo que reproduce el problema;
-- resultado esperado;
-- resultado obtenido;
-- commit utilizado.
-
-Las contribuciones deben mantener la ruta canónica del lenguaje, la portabilidad C17, las pruebas automatizadas, los errores explícitos, la reproducibilidad y la claridad de la sintaxis.
+La validación automatizada cubre principalmente entornos Linux y Windows. La compatibilidad específica de Android/Termux requiere pruebas en el dispositivo y no debe inferirse solo de una compilación de escritorio.
 
 ## Licencia
 
-Milena se distribuye bajo la licencia MIT.
-
-[Repositorio oficial de Milena](https://github.com/46Neon/Milena)
-
+Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo `LICENSE` para ver sus términos.
